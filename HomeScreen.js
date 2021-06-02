@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Alert, Modal,TouchableHighlight,View,Button, Text, StyleSheet, SafeAreaView, TextInput, Dimensions, FlatList, VirtualizedList } from 'react-native'
+import { Alert, Modal,TouchableOpacity,Switch, View,Button, Text, StyleSheet, SafeAreaView, TextInput, Dimensions, FlatList, VirtualizedList, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import axiosInstance from '../helpers/axios'
 import ShowJobs from './ShowJobs';
+import * as Animatable from 'react-native-animatable'
 //import axios from "axios"
 
 //import {Card, CardAction,CardButton,CardTitle} from "react-native-cards-custom"
@@ -11,6 +12,8 @@ import ShowJobs from './ShowJobs';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 import MenuItems from './MenuItems';
+import Dropdown from './Dropdown';
+
 //import { signout } from '../actions/auth-actions';
 const styles=StyleSheet.create({
     header:{
@@ -69,7 +72,12 @@ const styles=StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center', 
         borderRadius: 10
-        } 
+        } ,
+        jj:{
+          marginLeft:0,
+          height:250,
+          width:500
+        }
 //     card:{
 //         height: 225, backgroundColor: '#F1F1F1', 
 //  width, marginHorizontal: 2, 
@@ -79,22 +87,131 @@ const styles=StyleSheet.create({
 })
 
 const HomeScreen=({navigation})=>{
+
+ 
+  const [dataSource]=useState(['java','java developer','react','.net','python',])
+  const [loca]=useState(['hyderabad','banglore','chennai','mumbai',])
+  //const [location]=useState(['hyderabad','banglore','chennai','mumbai','delhi'])
+  const [filtered,setFiltered]=useState([])
+  const [filtered1,setFiltered1]=useState([])
+  const [searching,setIsSearching]=useState(false)
+  
     const [modalVisible, setModalVisible] = useState(false);
     const [ text, setText ] = useState('') 
+    const [message,setMessage]=useState('')
     const [da,setDa]=useState([])
     const [skills,setSkills]=useState('')
     const [location,setLocation]=useState('')
     const dispatch=useDispatch()
+
+
     const getting=async()=>{
         if(skills==""||location==""){
             setText("please enter skills and location")
         }else{ 
+         // console.log("location",location)
         const c=skills.toLowerCase();
         const d=location.toLowerCase();
         const resp=await axiosInstance.get(`/findjob/${c}/${d}`)
-        setDa(resp.data)
+       // setDa(resp.data)
+        //console.log('daoj')
+        if(resp.data.message){
+          console.log('if')
+          setMessage('No Jobs Found')
+        }else{
+          console.log('else')
+          setMessage('')
+          setDa(resp.data)
+        }
         }
     }
+   
+    
+    const onSearching=(text)=>{
+      let tempList=[]
+      let temp=text.toLowerCase()
+      if(text){
+        //setSkills(text)
+      setIsSearching(true)
+      
+        //const tempList=[]
+        tempList=dataSource.sort().filter((e)=>e.toLowerCase().includes(temp))
+       
+      
+       setFiltered(tempList)
+       setSkills(tempList)
+       }else{
+         setIsSearching(false)
+        setFiltered(tempList)
+      }
+    }
+    const onSearching1=(text)=>{
+      let tempList=[]
+      let temp=text.toLowerCase()
+      if(text){
+        //setSkills(text)
+      setIsSearching(true)
+      
+        //const tempList=[]
+        tempList=loca.sort().filter((e)=>e.toLowerCase().includes(temp))
+       
+      
+       setFiltered1(tempList)
+       setLocation(tempList)
+       }else{
+         setIsSearching(false)
+        setFiltered1(tempList)
+      }
+    }
+    const j=(d)=>{
+      //let k='';
+    console.log(d)
+      setSkills(d)
+      setFiltered([''])
+      //console.log(d)
+    }
+    const j1=(d)=>{
+      //let k='';
+    console.log(d)
+      setLocation(d)
+      setFiltered1([''])
+      //console.log(d)
+    }
+  
+    const hel=()=>{
+      if(filtered===0 && filtered!==""){
+        return ""
+      }else{
+        return( 
+          <View>
+          {filtered.map((item,id)=>(
+          <View key={id}>
+          <Text onPress={()=>j(item)} >{item}</Text>
+          {/* <Text>-------------</Text> */}
+          </View>
+      ) 
+      )}
+      </View>
+      )
+      }
+     }
+     const hel1=()=>{
+      if(filtered1===0 && filtered1!==""){
+        return ""
+      }else{
+        return( 
+          <View>
+          {filtered1.map((item,id)=>(
+          <View key={id}>
+          <Text onPress={()=>j1(item)} >{item}</Text>
+          {/* <Text>-------------</Text> */}
+          </View>
+      ) 
+      )}
+      </View>
+      )
+      }
+     }
   
     console.log(da)
     return (
@@ -102,7 +219,7 @@ const HomeScreen=({navigation})=>{
         <View style={{flex:1,
             backgroundColor:'white',marginLeft:0,
             marginRight:0}}>
-            <View style={{backgroundColor:'purple', height:50,
+            <View style={{backgroundColor:'#009387', height:50,
             justifyContent:'space-between', alignItems:'center',flexDirection:'row',
             marginHorizontal:0,marginRight:0}}>
         <Text style={{color:'white',fontSize:16,fontWeight:'bold',marginTop:7,
@@ -118,7 +235,14 @@ const HomeScreen=({navigation})=>{
             </View>
     </View>
             <ScrollView >
-                
+            {/* <TouchableOpacity onPress={()=>toggle()}>
+            <View pointerEvents='none' style={{marginTop:10}}>
+          <Switch value={isDarktheme} />
+          </View>
+          </TouchableOpacity> */}
+                <View style={{marginTop:20}}>
+                  {/* <Text style={{fontSize:20,color:'purple',marginLeft:60}}> Welcome to Job Application</Text> */}
+                </View>
              {/* <View style={{marginTop:20,flexDirection:'row', marginLeft:50}} >
              <Button onPress={()=>navigation.navigate('Saved Jobs')} title='Menu' /> 
             <View style={styles.sortBtn}>
@@ -139,22 +263,37 @@ const HomeScreen=({navigation})=>{
             </View>
            
         </View> */}
+        <Animatable.View animation='fadeInDownBig'>
+          <Image source={require('../assets/home.jpg')} style={styles.jj} />
+
+        </Animatable.View>
         
-            <View style={{flex:1,alignItems:'center',justifyContent:'center',marginTop:50}}>
+            <Animatable.View animation='fadeInDownBig'
+             style={{flex:1,alignItems:'center',justifyContent:'center',marginTop:10,
+             marginLeft:50, backgroundColor:'#009387',width:300,borderRadius:20}}>
             
-            <Text style={{fontSize:16,color:'green',marginBottom:20}}>Search jobs Here</Text>
+            <Text style={{fontSize:16,color:'white',marginBottom:20}}>Search jobs Here</Text>
                 {/* <Icon name='search' size={28} style={{marginLeft:20}} /> */}
                 <Text style={{color:'red'}}>{text}</Text>
-                <TextInput style={{height: 50,width:250, backgroundColor:'#F1F1F1',marginRight:60,borderWidth:1,borderColor:'green',borderRadius:10,
+                <TextInput style={{height: 50,overflow:'hidden', 
+                width:250, backgroundColor:'#F1F1F1',marginRight:60,
+                borderWidth:1,borderColor:'green',borderRadius:10,
                 marginLeft:60}} placeholder=" Enter skills"
-          onChangeText={text => setSkills(text)} defaultValue={skills} />
+          onChangeText={text=>setSkills(text)} defaultValue={skills} />
+          {/* {[text => onSearching(text)],text=>setSkills(text)}  */}
+
+<Text style={{position:'relative'}}>{hel()}</Text>
+        
+
           <TextInput style={{height: 50,borderWidth:1,borderColor:'green',borderRadius:10, width:250,backgroundColor:'#F1F1F1',marginTop:2,marginLeft:60,
           marginRight:60, marginTop:20, marginBottom:10}} placeholder=" Enter Location"
-          onChangeText={text => setLocation(text)} defaultValue={location} />
-<View style={{marginBottom:10,marginTop:10}}>
-<Button onPress={()=>getting()} title='search jobs'/>
-
+          onChangeText={text=>setLocation(text)} defaultValue={location} />
+             {/* [text => onSearching1(text)],text=>setLocation(text)} defaultValue={location} /> */}
+<View style={{marginBottom:10,marginTop:10,}}>
+<Button onPress={()=>getting()} title='search jobs' color='orange'/>
+<Text style={{position:'relative'}}>{hel1()}</Text>
 </View>
+
 {/*  
 <Card>
 <CardTitle
@@ -176,11 +315,12 @@ const HomeScreen=({navigation})=>{
     </CardAction>
 // </Card> */}
             
-        </View>
-        
-        <FlatList columnWrapperStyle=
-        
-        {{justifyContent:'space-between'}}
+        </Animatable.View>
+        <View>
+  <Text style={{color:'red',fontSize:17,marginLeft:140,marginTop:10}}>{message}</Text>
+</View>
+        <FlatList columnWrapperStyle=        
+        {{justifyContent:'center',flex:1, flexDirection:'column',}}
             showsVerticalScrollIndicator={true}
             contentContainerStyle={{marginTop:10,paddingBottom:0}}
             

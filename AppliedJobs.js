@@ -55,24 +55,51 @@ const AppliedJobs = ({navigation}) => {
     // }
     console.log(seekerEmail)
     return (
-        <ScrollView>
+//         <ScrollView>
           
-        <View style={{marginTop:10,backgroundColor:'white',}}>
+//         <View style={{marginTop:10,backgroundColor:'white',}}>
             
-             <Icon name="arrow-back" size={28} onPress={()=>navigation.navigate('Home')} />
-             <Text style={{color:'red'}}>{message}</Text>
-        {/* <Button title='view' onPress={()=>da()} /> */}
-            <FlatList columnWrapperStyle= {{justifyContent:'space-between'}}
- showsVerticalScrollIndicator={true}
- contentContainerStyle={{marginTop:10,paddingBottom:0}}
-  
- data={jobs} numColumns={2} 
- renderItem={({item}) => { 
- return <App1 plant={item} navigation={navigation} />
+//              <Icon name="arrow-back" size={28} onPress={()=>navigation.navigate('Home')} />
+//              <Text style={{color:'red'}}>{message}</Text>
+//         {/* <Button title='view' onPress={()=>da()} /> */}
+            
+            
+            
+//             <FlatList columnWrapperStyle= 
+//             {{flexDirection:'row'}}
+//                 showsVerticalScrollIndicator={true}
+//                 contentContainerStyle={{marginTop:10,paddingBottom:0}}
+                
+//                 data={jobs} numColumns={2} 
+//                 renderItem={({item}) => { 
+//                 return <App1 plant={item} navigation={navigation} />
+//                 }}
+//                 />  
+// </View>
+// </ScrollView>  
+
+
+
+
+<SafeAreaView style={{flex:1,flexDirection:'column',
+    backgroundColor:'green',marginLeft:10,
+    marginRight:0}}>
+        
+<View>
+<Text>sdkshakdjksdsdskl</Text>
+   <FlatList columnWrapperStyle=
+
+{{flexDirection:'row'}}
+showsVerticalScrollIndicator={true}
+contentContainerStyle={{marginTop:0,paddingBottom:0}}
+
+data={jobs} numColumns={2} 
+renderItem={({item}) => { 
+return <App1 plant={item} navigation={navigation} />
 }}
-/>  
+/>
 </View>
-</ScrollView>  
+</SafeAreaView>
     )
 }
 

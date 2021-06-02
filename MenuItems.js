@@ -1,11 +1,15 @@
-import React,{ useRef} from 'react';
+import React,{ useRef, useState} from 'react';
 import { useNavigation } from '@react-navigation/native'
-import { View, Text, } from 'react-native';
+import { View, Text, Switch, TouchableOpacity, } from 'react-native';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 //import { Icon } from 'react-native-vector-icons/icon';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+
  const MenuItems=()=>  {
 
+  
+ 
         const navigation = useNavigation();
     const menu = useRef();
 
@@ -61,6 +65,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
           </MenuItem>
           <MenuDivider />
           <MenuItem onPress={()=>navigation.navigate('logout')}>LogOut</MenuItem>
+
+
+
+         
         </Menu>
       </View>
     );

@@ -1,10 +1,94 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Button, TextInput } from 'react-native'
+import { View, Text, Button, TextInput, StyleSheet ,Dimensions,Platform,TouchableOpacity} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { applyjob, signout, updatejobseeker } from '../actions/auth-actions'
 import axiosInstance from '../helpers/axios'
 import  Icon  from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler'
+import * as Animatable from 'react-native-animatable'
+
+import {LinearGradient} from 'expo-linear-gradient'
+
+
+const {height}=Dimensions.get('screen')
+const height_logo=height-600;
+const styles=StyleSheet.create({
+    
+
+    container:{
+        flex:1,
+        backgroundColor:'#009387'
+      },
+      header:{
+        flex:1,
+        justifyContent:'flex-end',                                
+        paddingHorizontal:20,
+        paddingBottom:50
+      },
+      text_header:{
+        color:'#fff',
+        fontWeight:'bold',
+        fontSize:20
+      },
+      text_footer:{
+        color:'#05375a',
+        fontSize:18
+      },
+      footer:{
+        flex:5,
+        backgroundColor:'#fff',
+        borderTopLeftRadius:30,
+        borderTopRightRadius:30,
+        paddingVertical:50,
+        paddingHorizontal:30
+      },
+      logo:{
+        width:height_logo,
+        height:height_logo,
+        borderRadius:20
+      },
+      title:{
+        color:'#05375a',
+        fontSize:30,
+        fontWeight:'bold',
+      },
+      text:{
+        color:'gray',
+        marginTop:5
+      },
+      button:{
+        alignItems:'flex-end',
+        marginTop:30,
+        width:'100%'
+      },
+      signIn:{
+        width:'100%',
+        height:50,
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:10,
+    
+      },
+      textSign:{
+        fontSize:18,
+        //color:'white',
+        fontWeight:'bold'
+      },
+      actions:{
+        flexDirection:'row',
+        marginTop:10,
+        borderBottomWidth:1,
+        borderBottomColor:'#f2f2f2',
+        paddingBottom:5
+      },
+      textInput:{
+        flex:1,
+        marginTop:Platform.OS=== 'ios' ? 0 : -12,
+        paddingLeft:10,
+        color:'#05375a'
+      }
+
+})
 
 const ApplyJob=({navigation,route})=> {
     const user=route.params
@@ -37,7 +121,7 @@ const ApplyJob=({navigation,route})=> {
             setData(resp.data)
                    
             }else {
-                return [navigation.navigate('signin')]
+                return [navigation.navigate('beforesignin')]
             }
         
         
@@ -45,7 +129,15 @@ const ApplyJob=({navigation,route})=> {
         
     }
     seek()
-    },[])  //   if(data.length !=0){
+    },[])  
+    
+    
+    // setTimeout(()=>{
+    //     if(!auth.authenticate){ 
+    //     return [navigation.navigate('Details')]}
+    // },10000
+    // )
+    //   if(data.length !=0){
             //       console.log(data)
             //       setData("")
             //   }
@@ -103,7 +195,7 @@ const ApplyJob=({navigation,route})=> {
     //    const updating=()=>{
     //       console.log('update')
  
-    //         const user={fullname,email,phone,qualification,stream,skills,exp,location}
+    //         const user={fullname,email,phone,qualificlation,stream,skills,exp,location}
     //         console.log("component",user)
     //         const id1=data._id
     //         dispatch(updatejobseeker(user,id1))
@@ -111,9 +203,10 @@ const ApplyJob=({navigation,route})=> {
         
     
     // }
+    console.log(data)
     return (
-        <ScrollView>
-            <View style={{backgroundColor:'purple', height:50, alignItems:'center',flexDirection:'row'}}>
+        <ScrollView style={{backgroundColor:'#009387'}}>
+            <View style={{backgroundColor:'#009387', height:50, alignItems:'center',flexDirection:'row'}}>
  <Icon name="arrow-back" size={28} onPress={()=>navigation.goBack()} color='white' /> 
         <Text style={{color:'white',fontSize:18,fontWeight:'bold',marginTop:0,
        marginLeft:10}}>Checking Screen</Text>
@@ -121,13 +214,9 @@ const ApplyJob=({navigation,route})=> {
              onPress={()=>navigation.navigate('signin')}>signin</Text> */}
     </View>
              {/* <Icon name="arrow-back" size={28} onPress={()=>navigation.goBack()} /> */}
-        <View style={{ flex: 1,marginTop:25,
-        justifyContent:'center',alignItems:'center'}}>
-            <View style={{flexDirection:'row',marginHorizontal:10,marginTop:10,
-            justifyContent:'space-between'}}>
-               
-                {/* <Button onPress={()=>logout()} title="logout" /> */}
-                </View> 
+        <Animatable.View animation='fadeInDownBig' style={[{ flex: 1,marginTop:25,
+        justifyContent:'center',alignItems:'center',},styles.footer]}>
+           
              <Text style={{fontSize:20,fontWeight:'bold',
         marginLeft:0,marginBottom:10}}>Chek your details</Text>
         <View style={{flexDirection:"row",marginLeft:0}}>
@@ -187,14 +276,38 @@ const ApplyJob=({navigation,route})=> {
              width:200, backgroundColor:'#F1F1F1',}}></TextInput>
           
         </View>
-        <View style={{flexDirection:'row',alignItems:'flex-end',justifyContent:'space-between',
-         marginLeft:100,marginTop:10,marginRight:50,marginBottom:50}}>
+        {/* <View style={{flexDirection:'row',alignItems:'flex-end',justifyContent:'space-between',
+         marginLeft:100,marginTop:10,marginRight:50,marginBottom:50}}> */}
+             <View style={styles.button}>
+          
+          <LinearGradient
+          colors={['#08d4c4','#01ab9d']}
+          style={styles.signIn}
+          >
+             <TouchableOpacity onPress={()=>applying()}>
+            <Text style={[styles.textSign,{color:'#fff'}]}
             
-        <Button onPress={()=>navigation.navigate('update',data)} title="Update" />
-        <View style={{marginLeft:50}}>
+            >
+               Continue And Apply
+            </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+          <TouchableOpacity 
+             onPress={()=>navigation.navigate('update',data)}
+             style={[styles.signIn,{borderColor:'#009387',borderWidth:1,marginTop:15}]}
+             >
+               <Text style={[styles.textSign,{color:'#009387'}]}>
+                  Update
+               </Text>
+
+             </TouchableOpacity>
+         
+      </View>
+        {/* <Text style={[styles.textSign,{color:'#fff'}]} onPress={()=>navigation.navigate('update',data)}  >Update</Text> */}
+        {/* <View style={{marginLeft:50}}>
         <Button onPress={()=>applying()} title="continue and apply" />
-        </View>
-        </View>
+        </View> */}
+        {/* </View> */}
         
         
         {/* <View>
@@ -208,7 +321,7 @@ const ApplyJob=({navigation,route})=> {
             <Text>{data.location} </Text>
             <Button onPress={()=>logout()} title="logout" />
         </View> */}
-        </View>
+        </Animatable.View>
         </ScrollView>
     )
 }

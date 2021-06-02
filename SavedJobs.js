@@ -20,7 +20,7 @@ const SavedJobs = ({navigation}) => {
     }
     getdata()
     },[])
-    console.log(data)
+    //console.log(data)
     return (
         <SafeAreaView style={{flex:1,
             backgroundColor:'white',marginLeft:10,
